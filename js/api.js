@@ -3,10 +3,15 @@
 const API = {
   baseUrl: (function() {
     if (typeof window !== "undefined") {
-      const port = window.location.port;
+      const protocol = window.location.protocol;
       const host = window.location.hostname;
-      // If browsing from a separate dev server like Live Server (e.g. port 5500), target FastAPI on 8000
-      if ((host === "localhost" || host === "127.0.0.1") && (port === "5500" || port === "3000")) {
+      const port = window.location.port;
+      // If served directly via file://, target localhost:8000
+      if (protocol === "file:") {
+        return "http://127.0.0.1:8000";
+      }
+      // If browsing from any separate local dev server (Live Server, Vite, etc.) on any port other than 8000
+      if ((host === "localhost" || host === "127.0.0.1" || host === "::1") && port !== "8000") {
         return "http://127.0.0.1:8000";
       }
     }

@@ -69,7 +69,8 @@ async function signInWithFirebaseGoogle() {
 
     // Optional: Synchronize with FastAPI backend
     try {
-      const backendSync = await fetch("http://127.0.0.1:8001/auth/me", {
+      const apiHost = (typeof API !== "undefined" && API.baseUrl) ? API.baseUrl : "http://127.0.0.1:8000";
+      const backendSync = await fetch(`${apiHost}/api/auth/me`, {
         headers: { "Authorization": `Bearer ${idToken}` }
       });
       if (backendSync.ok) {
